@@ -365,8 +365,8 @@ void Main::print_help(const char *p_binary) {
 #ifdef TESTS_ENABLED
 	OS::get_singleton()->print("  --test [--help]                  Run unit tests. Use --test --help for more information.\n");
 #endif
-	OS::get_singleton()->print("\n");
 #endif
+	OS::get_singleton()->print("\n");
 }
 
 int Main::test_entrypoint(int argc, char *argv[], bool &tests_need_run) {
