@@ -28,6 +28,9 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
+#include "modules/modules_enabled.gen.h"
+#ifdef MODULE_FREETYPE_ENABLED
+
 #include "editor_fonts.h"
 
 #include "builtin_fonts.gen.h"
@@ -275,3 +278,5 @@ void editor_register_fonts(Ref<Theme> p_theme) {
 	MAKE_SOURCE_FONT(df_text_editor_status_code, default_font_size);
 	p_theme->set_font("status_source", "EditorFonts", df_text_editor_status_code);
 }
+
+#endif

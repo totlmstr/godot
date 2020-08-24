@@ -36,6 +36,7 @@
 #include "editor/editor_node.h"
 #include "editor/editor_scale.h"
 #include "editor/editor_settings.h"
+#include "modules/modules_enabled.gen.h"
 #include "scene/resources/bit_map.h"
 #include "scene/resources/dynamic_font.h"
 #include "scene/resources/material.h"
@@ -803,6 +804,7 @@ bool EditorFontPreviewPlugin::handles(const String &p_type) const {
 
 Ref<Texture2D> EditorFontPreviewPlugin::generate_from_path(const String &p_path, const Size2 &p_size) const {
 	RES res = ResourceLoader::load(p_path);
+#ifdef MODULE_FREETYPE_ENABLED
 	Ref<DynamicFont> sampled_font;
 	if (res->is_class("DynamicFont")) {
 		sampled_font = res->duplicate();
@@ -814,6 +816,9 @@ Ref<Texture2D> EditorFontPreviewPlugin::generate_from_path(const String &p_path,
 		sampled_font->set_font_data(res);
 	}
 	sampled_font->set_size(50);
+#else
+	Ref<Font> sampled_font;
+#endif
 
 	String sampled_text = "Abg";
 	Vector2 size = sampled_font->get_string_size(sampled_text);

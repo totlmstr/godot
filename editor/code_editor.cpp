@@ -36,6 +36,7 @@
 #include "editor/editor_scale.h"
 #include "editor_node.h"
 #include "editor_settings.h"
+#include "modules/modules_enabled.gen.h"
 #include "scene/gui/margin_container.h"
 #include "scene/gui/separator.h"
 #include "scene/resources/dynamic_font.h"
@@ -729,6 +730,7 @@ void CodeTextEditor::_text_editor_gui_input(const Ref<InputEvent> &p_event) {
 		}
 	}
 
+#ifdef MODULE_FREETYPE_ENABLED
 	Ref<InputEventMagnifyGesture> magnify_gesture = p_event;
 	if (magnify_gesture.is_valid()) {
 		Ref<DynamicFont> font = text_editor->get_theme_font("font");
@@ -744,6 +746,7 @@ void CodeTextEditor::_text_editor_gui_input(const Ref<InputEvent> &p_event) {
 		}
 		return;
 	}
+#endif
 
 	Ref<InputEventKey> k = p_event;
 
@@ -779,12 +782,16 @@ void CodeTextEditor::_zoom_changed() {
 }
 
 void CodeTextEditor::_reset_zoom() {
+#ifdef MODULE_FREETYPE_ENABLED
 	Ref<DynamicFont> font = text_editor->get_theme_font("font"); // Reset source font size to default.
 
 	if (font.is_valid()) {
 		EditorSettings::get_singleton()->set("interface/editor/code_font_size", 14);
 		font->set_size(14);
 	}
+#else
+	Ref<Font> font = text_editor->get_theme_font("font"); // Keep font size at default.
+#endif
 }
 
 void CodeTextEditor::_line_col_changed() {
@@ -900,15 +907,21 @@ void CodeTextEditor::_font_resize_timeout() {
 }
 
 bool CodeTextEditor::_add_font_size(int p_delta) {
+#ifdef MODULE_FREETYPE_ENABLED
 	Ref<DynamicFont> font = text_editor->get_theme_font("font");
+#else
+	Ref<Font> font = text_editor->get_theme_font("font");
+#endif
 
 	if (font.is_valid()) {
+#ifdef MODULE_FREETYPE_ENABLED
 		int new_size = CLAMP(font->get_size() + p_delta, 8 * EDSCALE, 96 * EDSCALE);
 
 		if (new_size != font->get_size()) {
 			EditorSettings::get_singleton()->set("interface/editor/code_font_size", new_size / EDSCALE);
 			font->set_size(new_size);
 		}
+#endif
 
 		return true;
 	} else {

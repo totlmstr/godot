@@ -34,6 +34,7 @@
 #include "core/version.h"
 #include "editor_node.h"
 #include "editor_scale.h"
+#include "modules/modules_enabled.gen.h"
 #include "scene/gui/center_container.h"
 #include "scene/resources/dynamic_font.h"
 
@@ -63,7 +64,11 @@ void EditorLog::_notification(int p_what) {
 		log->add_theme_font_override("normal_font", get_theme_font("output_source", "EditorFonts"));
 		log->add_theme_color_override("selection_color", get_theme_color("accent_color", "Editor") * Color(1, 1, 1, 0.4));
 	} else if (p_what == NOTIFICATION_THEME_CHANGED) {
+#ifdef MODULE_FREETYPE_ENABLED
 		Ref<DynamicFont> df_output_code = get_theme_font("output_source", "EditorFonts");
+#else
+		Ref<Font> df_output_code = get_theme_font("output_source", "EditorFonts");
+#endif
 		if (df_output_code.is_valid()) {
 			if (log != nullptr) {
 				log->add_theme_font_override("normal_font", get_theme_font("output_source", "EditorFonts"));

@@ -32,6 +32,7 @@
 
 #include "core/debugger/engine_debugger.h"
 #include "core/os/keyboard.h"
+#include "modules/modules_enabled.gen.h"
 #include "scene/gui/control.h"
 #include "scene/resources/dynamic_font.h"
 #include "scene/scene_string_names.h"
@@ -657,10 +658,12 @@ void Window::_update_viewport_size() {
 		if (!use_font_oversampling) {
 			font_oversampling = 1.0;
 		}
+#ifdef MODULE_FREETYPE_ENABLED
 		if (DynamicFontAtSize::font_oversampling != font_oversampling) {
 			DynamicFontAtSize::font_oversampling = font_oversampling;
 			DynamicFont::update_oversampling();
 		}
+#endif
 	}
 
 	notification(NOTIFICATION_WM_SIZE_CHANGED);

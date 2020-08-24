@@ -430,7 +430,11 @@ Ref<Theme> create_editor_theme(const Ref<Theme> p_theme) {
 		editor_register_and_generate_icons(p_theme, dark_theme, thumb_size, true);
 	}
 
+#ifdef MODULE_FREETYPE_ENABLED
 	editor_register_fonts(theme);
+#else
+	WARN_PRINT("Freetype support disabled, fonts and font sizes will be kept at their defaults.");
+#endif
 
 	// Highlighted tabs and border width
 	Color tab_color = highlight_tabs ? base_color.lerp(font_color, contrast) : base_color;
